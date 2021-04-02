@@ -9,7 +9,11 @@ FROM employees
 WHERE hire_date >= '1986-01-01' AND hire_date < '1987-01-01';
 
 --3)List the manager of each department with the following information: department number, department name, the manager's employee number, last name, first name.
-
+SELECT e.first_name, e.last_name, t.title, d.dept_no, d.dept_name, dm.emp_no
+FROM employees AS e
+JOIN titles AS t ON (e.emp_title_id = t.title_id)
+JOIN department_manager AS dm ON (e.emp_no = dm.emp_no)
+JOIN department AS d ON (dm.dept_no = d.dept_no);
 
 --4)List the department of each employee with the following information: employee number, last name, first name, and department name.
 
