@@ -4,62 +4,51 @@
 
 -- EmployeesSQL ERD
 
-CREATE TABLE `Department` (
-    `Dept_no` int  NOT NULL ,
-    `Dept_name` varchar(50)  NOT NULL ,
-    PRIMARY KEY (
-        `Dept_no`
-    )
+CREATE TABLE Titles (
+    title_id varchar  NOT NULL ,
+    title varchar(30)  NOT NULL,
+	PRIMARY KEY (title_id)
 );
 
-CREATE TABLE `Department_Manager` (
-    `Dept_no` int  NOT NULL ,
-    `Emp_no` int  NOT NULL 
+CREATE TABLE Employees (
+    emp_no varchar  NOT NULL ,
+    emp_title_id varchar  NOT NULL ,
+    birth_date date  NOT NULL ,
+    first_name varchar(20)  NOT NULL ,
+    last_name varchar(20)  NOT NULL ,
+    sex varchar(1)  NOT NULL ,
+    hire_date date  NOT NULL ,
+	FOREIGN KEY (emp_title_id) REFERENCES Titles (title_id),
+	PRIMARY KEY (emp_no)
 );
 
-CREATE TABLE `Department_Emp` (
-    `Emp_no` int  NOT NULL ,
-    `Dept_no` int  NOT NULL 
+
+CREATE TABLE Department (
+    dept_no varchar  NOT NULL ,
+    dept_name varchar(50)  NOT NULL,
+    PRIMARY KEY (dept_no)
 );
 
-CREATE TABLE `Employees` (
-    `Emp_no` int  NOT NULL ,
-    `emp_title_id` int  NOT NULL ,
-    `birth_date` date  NOT NULL ,
-    `first_name` varchar(20)  NOT NULL ,
-    `last_name` varchar(20)  NOT NULL ,
-    `sex` varchar(1)  NOT NULL ,
-    `hire_date` date  NOT NULL ,
-    PRIMARY KEY (
-        `Emp_no`
-    )
+CREATE TABLE Department_Manager (
+    dept_no varchar  NOT NULL,
+    emp_no varchar  NOT NULL,
+	FOREIGN KEY (dept_no) REFERENCES Department (dept_no),
+	FOREIGN KEY (emp_no) REFERENCES Employees (emp_no),
+	PRIMARY KEY (dept_no, emp_no)
 );
 
-CREATE TABLE `Titles` (
-    `title_id` int  NOT NULL ,
-    `title` varchar(30)  NOT NULL 
+CREATE TABLE Department_Emp (
+    emp_no varchar  NOT NULL ,
+    dept_no varchar  NOT NULL,
+	FOREIGN KEY (emp_no) REFERENCES Employees (emp_no),
+	FOREIGN KEY (dept_no) REFERENCES Department (dept_no),
+	PRIMARY KEY (emp_no, dept_no)
 );
 
-CREATE TABLE `Salary` (
-    `Emp_no` int  NOT NULL ,
-    `salary` decimal  NOT NULL 
+
+CREATE TABLE Salary (
+    emp_no varchar  NOT NULL ,
+    salary decimal  NOT NULL, 
+	FOREIGN KEY (emp_no) REFERENCES Employees (emp_no),
+	PRIMARY KEY (emp_no)
 );
-
-ALTER TABLE `Department_Manager` ADD CONSTRAINT `fk_Department_Manager_Dept_no` FOREIGN KEY(`Dept_no`)
-REFERENCES `Department` (`Dept_no`);
-
-ALTER TABLE `Department_Manager` ADD CONSTRAINT `fk_Department_Manager_Emp_no` FOREIGN KEY(`Emp_no`)
-REFERENCES `Employees` (`Emp_no`);
-
-ALTER TABLE `Department_Emp` ADD CONSTRAINT `fk_Department_Emp_Emp_no` FOREIGN KEY(`Emp_no`)
-REFERENCES `Employees` (`Emp_no`);
-
-ALTER TABLE `Department_Emp` ADD CONSTRAINT `fk_Department_Emp_Dept_no` FOREIGN KEY(`Dept_no`)
-REFERENCES `Department` (`Dept_no`);
-
-ALTER TABLE `Titles` ADD CONSTRAINT `fk_Titles_title_id` FOREIGN KEY(`title_id`)
-REFERENCES `Employees` (`emp_title_id`);
-
-ALTER TABLE `Salary` ADD CONSTRAINT `fk_Salary_Emp_no` FOREIGN KEY(`Emp_no`)
-REFERENCES `Employees` (`Emp_no`);
-
